@@ -18,18 +18,20 @@ app.use(bodyParser.json())
 // this keeps track of the email id connected to socket id
 const emailtoSocketMap = new Map()
 
+// socket : A two-way communication endpoint between two machines over a network.
+// websocket : A full-duplex (send and receive / two way) communication protocol over a single, long-lived TCP connection between the client (browser) and the server.
 
 io.on("connection", (socket) => {
     console.log("new Connection")
     socket.on('join-server', data => {
 
-        const { roomId, emailID } = data
-        console.log("User", emailID, "Joined Room", roomId)
+        const { roomId, emailId } = data
+        console.log("User", emailId, "Joined Room", roomId)
 
-        emailtoSocketMap.set(emailID, socket.id)
+        emailtoSocketMap.set(emailId, socket.id)
         socket.join(roomId)
-        socket.emit('joined-room',{roomId})
-        socket.broadcast.to(roomId).emit('user-joined', { emailID })
+        socket.emit('joined-room', { roomId })
+        socket.broadcast.to(roomId).emit('user-joined', { emailId })
     })
 
 
